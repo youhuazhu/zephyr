@@ -1,0 +1,7 @@
+/* -- Extra CSS styles for Zephyr content (RTD theme) ----------------------- */
+
+/* make the page width fill the window */
+.wy-nav-content {
+   max-width: none;
+}
+

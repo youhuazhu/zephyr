@@ -87,7 +87,12 @@ endif()
 # the i18n builder cannot share the environment and doctrees with the others
 set(I18NSPHINXOPTS  ${SPHINXOPTS})
 
-set(DOXYFILE_IN ${CMAKE_CURRENT_LIST_DIR}/zephyr.doxyfile.in)
+if(${TESTCASES} STREQUAL "yes")
+  set(DOXYFILE_IN ${CMAKE_CURRENT_LIST_DIR}/testcases/zephyr.doxyfile.in)
+else()
+  set(DOXYFILE_IN ${CMAKE_CURRENT_LIST_DIR}/zephyr.doxyfile.in)
+endif()
+
 set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/zephyr.doxyfile)
 set(DOXY_OUT ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
 set(RST_OUT ${CMAKE_CURRENT_BINARY_DIR}/rst)

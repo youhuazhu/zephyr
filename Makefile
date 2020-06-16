@@ -22,3 +22,9 @@ pdfdocs:
 
 doxygen:
 	mkdir -p ${BUILDDIR} && cmake -GNinja -DDOC_TAG=${DOC_TAG} -DSPHINXOPTS=${SPHINXOPTS} -B${BUILDDIR} -Hdoc/ && ninja -C ${BUILDDIR} doxygen
+
+testcases:
+	mkdir -p ${BUILDDIR} && cmake -GNinja -DDOC_TAG=${DOC_TAG} -DSPHINXOPTS=${SPHINXOPTS} -DTESTCASES=yes -B${BUILDDIR} -Hdoc/ && ninja -C ${BUILDDIR} doxygen && cd doc/testcases/ && make html
+
+testcases-pdf:
+	mkdir -p ${BUILDDIR} && cmake -GNinja -DDOC_TAG=${DOC_TAG} -DSPHINXOPTS=${SPHINXOPTS} -DTESTCASES=yes -B${BUILDDIR} -Hdoc/ && ninja -C ${BUILDDIR} doxygen && cd doc/testcases/ && make latexpdfja

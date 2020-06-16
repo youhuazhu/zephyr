@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Environment &mdash; Software Integration test specification 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Intergration Test cases" href="modules/index.html" />
+    <link rel="prev" title="Overrall" href="overrall.html" />
+    <link href="_static/zephyr-custom.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Software Integration test specification
+          
+
+          
+            
+            <img src="_static/Zephyr-Kite-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Zephyr intergration test spec</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overrall.html">Overrall</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/index.html">Intergration Test cases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Software Integration test specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Environment</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="environment">
+<span id="id1"></span><h1>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h1>
+<p>Description of intergration testing environment, including software, hardware environment.</p>
+<p><strong>1. In Scope</strong>:</p>
+<p>This document is intended to address the following functional safety requirements.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>IEC 61508-2:2010 (systems/hardware development)</dt><dd><p>7.9.2.3, 7.9.2.4</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>IEC 61508-3:2010 (software development)</dt><dd><p>7.9.2.6, 7.9.2.7</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ISO 26262-8:2011 (verification supporting process)</dt><dd><p>9.4.2.1, 9.4.2.2, 9.4.2.3</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>2. Out of Scope</strong>:</p>
+<p>Information specific to the verification plan and verification report are not addressed in this document.</p>
+<p><strong>3. Setup environment</strong>:</p>
+<p>We use a script named sanitycheck to run intergration testcases.
+This script scans for the set of unit test applications in the git repository
+and attempts to execute them. By default, it tries to build each test
+case on boards marked as default in the board definition file.</p>
+<p>The default options will build the majority of the tests on a defined set of
+boards and will run in an emulated environment if available for the
+architecture or configuration being tested.</p>
+<p>In normal use, sanitycheck runs a limited set of kernel tests (inside
+an emulator).  Because of its limited test execution coverage, sanitycheck
+cannot guarantee local changes will succeed in the full build
+environment, but it does sufficient testing by building samples and
+tests for different boards and different configurations to help keep the
+complete code tree buildable.</p>
+<p>When using (at least) one <code class="docutils literal notranslate"><span class="pre">-v</span></code> option, sanitycheck’s console output
+shows for every test how the test is run (qemu, native_posix, etc.) or
+whether the binary was just built.</p>
+<p>To run the script in the local tree, follow the steps below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source zephyr-env.sh
+$ ./scripts/sanitycheck
+</pre></div>
+</div>
+<p>If you have a system with a large number of cores, you can build and run
+all possible tests using the following options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./scripts/sanitycheck --all --enable-slow
+</pre></div>
+</div>
+<p>This will build for all available boards and run all applicable tests in
+a simulated (for example QEMU) environment.</p>
+<p>The list of command line options supported by sanitycheck can be viewed using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./scripts/sanitycheck --help
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

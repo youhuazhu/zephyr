@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Mutex &mdash; Software Integration test specification 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Semaphore" href="semaphore.html" />
+    <link rel="prev" title="Intergration Test cases" href="index.html" />
+    <link href="../_static/zephyr-custom.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Software Integration test specification
+          
+
+          
+            
+            <img src="../_static/Zephyr-Kite-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Zephyr intergration test spec</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overrall.html">Overrall</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../environment.html">Environment</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Intergration Test cases</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Mutex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="semaphore.html">Semaphore</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Software Integration test specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Intergration Test cases</a> &raquo;</li>
+        
+      <li>Mutex</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mutex">
+<span id="id1"></span><h1>Mutex<a class="headerlink" href="#mutex" title="Permalink to this headline">¶</a></h1>
+<dl class="group">
+<dt>
+<span class="target" id="group__kernel__mutex__tests"></span><em>group</em> <code class="sig-name descname">kernel_mutex_tests</code></dt>
+<dd><p>Test for the Mutex kernel object. </p>
+<p>To test the all the function and mechnism for mutex, it contains below several test cases. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Functions</p>
+<dl class="function">
+<dt id="_CPPv414K_MUTEX_DEFINE6kmutex">
+<span id="_CPPv314K_MUTEX_DEFINE6kmutex"></span><span id="_CPPv214K_MUTEX_DEFINE6kmutex"></span><span id="K_MUTEX_DEFINE__kmutex"></span><span class="target" id="group__kernel__mutex__tests_1gaa09e7e2be58928306811e7a67bea0d95"></span><code class="sig-name descname">K_MUTEX_DEFINE</code><span class="sig-paren">(</span>kmutex<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414K_MUTEX_DEFINE6kmutex" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Test mutex initialization in build time. </p>
+<p>To verify a mutex can be defined and initialized at compile time, this is the TESTPOINT of init via K_MUTEX_DEFINE.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv429test_mutex_reent_lock_foreverv">
+<span id="_CPPv329test_mutex_reent_lock_foreverv"></span><span id="_CPPv229test_mutex_reent_lock_foreverv"></span><span id="test_mutex_reent_lock_forever__void"></span><span class="target" id="group__kernel__mutex__tests_1gaadfc978a4f25ad19f4f9367c87b6706e"></span>void <code class="sig-name descname">test_mutex_reent_lock_forever</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429test_mutex_reent_lock_foreverv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Test mutex initialization and locking forever case. </p>
+<p><ul class="simple">
+<li><p>To verify a mutex can be defined and initialized at compile time or run time.</p></li>
+<li><p>To verify that getting a lock of a mutex already locked, waiters will be blocked forever.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv429test_mutex_reent_lock_no_waitv">
+<span id="_CPPv329test_mutex_reent_lock_no_waitv"></span><span id="_CPPv229test_mutex_reent_lock_no_waitv"></span><span id="test_mutex_reent_lock_no_wait__void"></span><span class="target" id="group__kernel__mutex__tests_1gac2f8d352ab5b50a31d8173f4760d418f"></span>void <code class="sig-name descname">test_mutex_reent_lock_no_wait</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429test_mutex_reent_lock_no_waitv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Test mutex initialization and locking for no wait case. </p>
+<p><ul class="simple">
+<li><p>To verify a mutex can be defined and initialized at compile time or run time.</p></li>
+<li><p>To verify that getting a lock of a mutex already locked, waiters will not wait for it.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv434test_mutex_reent_lock_timeout_failv">
+<span id="_CPPv334test_mutex_reent_lock_timeout_failv"></span><span id="_CPPv234test_mutex_reent_lock_timeout_failv"></span><span id="test_mutex_reent_lock_timeout_fail__void"></span><span class="target" id="group__kernel__mutex__tests_1gae7ce1c309e1a7f73583c1ee6ad336d27"></span>void <code class="sig-name descname">test_mutex_reent_lock_timeout_fail</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434test_mutex_reent_lock_timeout_failv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Test mutex initialization and locking for timeout failed case. </p>
+<p><ul class="simple">
+<li><p>To verify a mutex can be defined and initialized at compile time or run time.</p></li>
+<li><p>To verify that getting a lock of a mutex already locked, waiters will wait for a period of time and fail to get it.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv434test_mutex_reent_lock_timeout_passv">
+<span id="_CPPv334test_mutex_reent_lock_timeout_passv"></span><span id="_CPPv234test_mutex_reent_lock_timeout_passv"></span><span id="test_mutex_reent_lock_timeout_pass__void"></span><span class="target" id="group__kernel__mutex__tests_1gac466d1112fb5aeeaa9899ae7e0179a5f"></span>void <code class="sig-name descname">test_mutex_reent_lock_timeout_pass</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434test_mutex_reent_lock_timeout_passv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Test mutex initialization and locking for timeout successful case. </p>
+<p><ul class="simple">
+<li><p>To verify a mutex can be defined and initialized at compile time or run time.</p></li>
+<li><p>To verify that getting a lock of a mutex already locked will succeed and waiters will be unblocked only when the number of locks reaches zero.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv422test_mutex_lock_unlockv">
+<span id="_CPPv322test_mutex_lock_unlockv"></span><span id="_CPPv222test_mutex_lock_unlockv"></span><span id="test_mutex_lock_unlock__void"></span><span class="target" id="group__kernel__mutex__tests_1gad59f17d4e30fc6d62c34fc3f8b848871"></span>void <code class="sig-name descname">test_mutex_lock_unlock</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422test_mutex_lock_unlockv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Test mutex set amount of time the thread will wait. </p>
+<p>To verify the mutex lock operation shall accept a timeout parameter indicating the maximum amount of time the thread will wait.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv420test_mutex_recursivev">
+<span id="_CPPv320test_mutex_recursivev"></span><span id="_CPPv220test_mutex_recursivev"></span><span id="test_mutex_recursive__void"></span><span class="target" id="group__kernel__mutex__tests_1gae71b8e5d5d2410d17eaaf52d765746b5"></span>void <code class="sig-name descname">test_mutex_recursive</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420test_mutex_recursivev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><strong>Test:</strong> recursive mutex </p>
+<p><strong>Describe:</strong> <ul class="simple">
+<li><p>To verify that getting a lock of a mutex already locked will succeed and waiters will be unblocked only when the number of locks reaches zero.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv431test_mutex_priority_inheritancev">
+<span id="_CPPv331test_mutex_priority_inheritancev"></span><span id="_CPPv231test_mutex_priority_inheritancev"></span><span id="test_mutex_priority_inheritance__void"></span><span class="target" id="group__kernel__mutex__tests_1gac78832a319c3830d8341d524bf89fd1a"></span>void <code class="sig-name descname">test_mutex_priority_inheritance</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431test_mutex_priority_inheritancev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Test mutex’s priority inheritance mechanism. </p>
+<p>To verify mutex provide priority inheritance to prevent prority inversion, and there are 3 cases need to run. The thread T1 hold the mutex first and cases list as below:<ul class="simple">
+<li><p>case 1. When prority T2 &gt; T1, priority inheritance happened.</p></li>
+<li><p>case 2. When prority T1 &gt; T2, priority inheritance won’t happened.</p></li>
+<li><p>case 3. When prority T2 &gt; T3 &gt; T1, priority inheritance happened but T2 wait for timeout and T3 got the mutex.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>should be PASS. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
