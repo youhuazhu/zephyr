@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 import re
+import subprocess
 from collections import OrderedDict
 
 result_re = re.compile(".*(PASS|FAIL|SKIP) - (test_)?(.*)")
@@ -10,6 +11,7 @@ class Harness:
     FAULT = "ZEPHYR FATAL ERROR"
     RUN_PASSED = "PROJECT EXECUTION SUCCESSFUL"
     RUN_FAILED = "PROJECT EXECUTION FAILED"
+    BOOTING_ZHEPHYR = "Booting Zephyr OS"
 
     def __init__(self):
         self.state = None
@@ -27,6 +29,8 @@ class Harness:
         self.record = None
         self.recording = []
         self.fieldnames = []
+        self.running_dir = None
+        self.handle_script = None
 
     def configure(self, instance):
         config = instance.testcase.harness_config
@@ -40,6 +44,8 @@ class Harness:
             self.repeat = config.get('repeat', 1)
             self.ordered = config.get('ordered', True)
             self.record = config.get('record', {})
+            self.running_dir = config.get('running_dir', None)
+            self.handle_script = config.get('handle_script', None)
 
     def process_test(self, line):
 
@@ -113,8 +119,22 @@ class Console(Harness):
                     csv.append(v.strip())
                 self.recording.append(csv)
 
+        if self.handle_script and self.BOOTING_ZHEPHYR in line:
+            with subprocess.Popen([self.handle_script,self.running_dir], stdout=subprocess.PIPE) as proc:
+                try:
+                    stdout, _ = proc.communicate(15)
+                    if "pass" in stdout.decode():
+                        self.state = "passed"
+                    elif "skip" in stdout.decode():
+                        self.state = "skipped"
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+                    self.state = "FAIL"
+
         if self.state == "passed":
             self.tests[self.id] = "PASS"
+        elif self.state == "skipped":
+            self.tests[self.id] = "SKIP"
         else:
             self.tests[self.id] = "FAIL"
 

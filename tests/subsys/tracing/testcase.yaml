@@ -1,0 +1,18 @@
+tests:
+  tracing.transport:
+    tags: tracing_disabled
+  tracing.transport.uart:
+    extra_args: CONF_FILE="prj_uart.conf"
+    filter: CONFIG_UART_CONSOLE
+    tags: tracing_uart
+  tracing.transport.uart.ctf:
+    extra_args: CONF_FILE="prj_uart_ctf.conf"
+    platform_allow: qemu_x86 qemu_x86_64
+    harness: console
+    harness_config:
+      handle_script: tests/subsys/tracing/ctf_handle.py
+    tags: tracing_uart_ctf
+  tracing.transport.usb:
+    extra_args: CONF_FILE="prj_usb.conf"
+    filter: CONFIG_UART_CONSOLE
+    tags: tracing_usb
