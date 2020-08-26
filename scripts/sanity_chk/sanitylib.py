@@ -391,6 +391,7 @@ class BinaryHandler(Handler):
         harness_import = HarnessImporter(harness_name)
         harness = harness_import.instance
         harness.configure(self.instance)
+        harness.running_dir = self.instance.build_dir
 
         if self.call_make_run:
             command = [self.generator_cmd, "run"]
@@ -666,6 +667,7 @@ class DeviceHandler(Handler):
         harness_import = HarnessImporter(harness_name)
         harness = harness_import.instance
         harness.configure(self.instance)
+        harness.running_dir = self.instance.build_dir
         read_pipe, write_pipe = os.pipe()
         start_time = time.time()
 
@@ -932,6 +934,8 @@ class QEMUHandler(Handler):
         harness_import = HarnessImporter(self.instance.testcase.harness.capitalize())
         harness = harness_import.instance
         harness.configure(self.instance)
+        harness.running_dir = self.instance.build_dir
+
         self.thread = threading.Thread(name=self.name, target=QEMUHandler._thread,
                                        args=(self, self.timeout, self.build_dir,
                                              self.log_fn, self.fifo_fn,
@@ -1663,7 +1667,7 @@ class TestInstance(DisablePyTestCollectionMixin):
                 runnable = False
 
         # console harness allows us to run the test and capture data.
-        if self.testcase.harness in [ 'console', 'ztest']:
+        if self.testcase.harness in ['console', 'ztest','pytest']:
 
             # if we have a fixture that is also being supplied on the
             # command-line, then we need to run the test, not just build it.
@@ -2528,7 +2532,7 @@ class TestSuite(DisablePyTestCollectionMixin):
                               str(instance.metrics.get("unrecognized", []))))
                 failed += 1
 
-            if instance.metrics.get('handler_time', None):
+            if instance.metrics.get('handler_time', None) and instance.status != "skipped" :
                 run += 1
 
         if self.total_tests and self.total_tests != self.total_skipped:

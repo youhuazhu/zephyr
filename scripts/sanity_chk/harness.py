@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 import re
+import subprocess
 from collections import OrderedDict
 
 result_re = re.compile(".*(PASS|FAIL|SKIP) - (test_)?(.*)")
@@ -28,6 +29,8 @@ class Harness:
         self.recording = []
         self.fieldnames = []
         self.ztest = False
+        self.running_dir = None
+        self.handle_script = None
 
     def configure(self, instance):
         config = instance.testcase.harness_config
@@ -41,6 +44,8 @@ class Harness:
             self.repeat = config.get('repeat', 1)
             self.ordered = config.get('ordered', True)
             self.record = config.get('record', {})
+            self.running_dir = config.get('running_dir', None)
+            self.handle_script = config.get('handle_script', None)
 
     def process_test(self, line):
 
@@ -116,6 +121,29 @@ class Console(Harness):
 
         if self.state == "passed":
             self.tests[self.id] = "PASS"
+        else:
+            self.tests[self.id] = "FAIL"
+
+        self.process_test(line)
+
+class Pytest(Harness):
+    def handle(self, line):
+        if self.handle_script and self.RUN_PASSED in line:
+            with subprocess.Popen([self.handle_script, self.running_dir], stdout=subprocess.PIPE) as proc:
+                try:
+                    stdout, _ = proc.communicate(15)
+                    if "failed" not in stdout.decode():
+                        self.state = "passed"
+                    elif "skip" in stdout.decode():
+                        self.state = "skipped"
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+                    self.state = "FAIL"
+
+        if self.state == "passed":
+            self.tests[self.id] = "PASS"
+        elif self.state == "skipped":
+            self.tests[self.id] = "SKIP"
         else:
             self.tests[self.id] = "FAIL"
 
