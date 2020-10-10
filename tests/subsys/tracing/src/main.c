@@ -33,7 +33,14 @@ K_SEM_DEFINE(thread2_sem, 0, 1);
 /* thread handle for switch */
 void thread_handle(void *p1, void *self_sem, void *other_sem)
 {
+#ifdef CONFIG_TRACING_CTF
+	/* wait harness to handle the tracing data, this case will timeout
+	 * if harness handle fail.
+	 */
+	while (1) {
+#else
 	for (int i = 0; i < LOOP_TIMES; i++) {
+#endif
 		/* take my semaphore */
 		k_sem_take(self_sem, K_FOREVER);
 		/* wait for a while, then let other thread have a turn. */
@@ -43,7 +50,7 @@ void thread_handle(void *p1, void *self_sem, void *other_sem)
 	}
 }
 
-#if (defined(CONFIG_TRACING_BACKEND_UART) || defined(CONFIG_TRACING_BACKEND_USB))
+#if (defined(CONFIG_TRACING_BACKEND_UART) || defined(CONFIG_TRACING_BACKEND_USB)) && !defined(CONFIG_TRACING_CTF)
 static void tracing_backends_output(
 		const struct tracing_backend *backend,
 		uint8_t *data, uint32_t length)
@@ -63,7 +70,7 @@ static void tracing_backends_output(
 }
 #endif
 
-#if defined(CONFIG_TRACING_BACKEND_UART)
+#if defined(CONFIG_TRACING_BACKEND_UART) && !defined(CONFIG_TRACING_CTF)
 const struct tracing_backend_api tracing_uart_backend_api = {
 	.init = NULL,
 	.output  = tracing_backends_output
@@ -93,14 +100,45 @@ void generate_more_tracing_data(void)
 
 	thread_handle(NULL, &thread1_sem, &thread2_sem);
 }
+
 /**
  * @brief Test tracing data which produced from backends.
  *
+ * @ingroup driver_sensor_subsys_tests
+ *
  * @details
+ * Test Objective:
  * - Check the tracing data in backends, it should include thread/semaphore.. info,
  * if not, the related variable should be false.
  *
- * @ingroup subsys_tracing_tests
+ * Testing techniques:
+ * - Function and black box testing.
+ * - Interface testing.
+ * - Dynamic analysis and testing.
+ *
+ * Prerequisite Conditions:
+ * - CONFIG_TRACING
+ * - CONFIG_TRACING_TEST
+ * - CONFIG_TRACING_BACKEND_USB
+ * - CONFIG_TRACING_BACKEND_UART
+ *
+ * Input Specifications:
+ * - N/A
+ *
+ * Test Procedure:
+ * -# Create a thread to generate more switch thread tracing data.
+ * -# Define a USB and a UART backend to get tracing data.
+ * -# Check the content of the traing output.
+ *
+ * Expected Test Result:
+ * - Tracing data include thread,idle thread info
+ * based on the provided trace data.
+ *
+ * Pass/Fail Criteria:
+ * - Successful if check points in test procedure are all passed, otherwise failure.
+ *
+ * Assumptions and Constraints:
+ * - N/A
  */
 void test_tracing_function(void)
 {
@@ -121,6 +159,50 @@ void test_tracing_function(void)
 #endif
 }
 
+/**
+ * @brief Test tracing CTF data.
+ *
+ * @ingroup driver_sensor_subsys_tests
+ *
+ * @details
+ * Test Objective:
+ * - Check if zephyr support the tracing CTF format.
+ *
+ * Testing techniques:
+ * - function and black box testing,Interface testing,
+ * Dynamic analysis and testing.
+ *
+ * Prerequisite Conditions:
+ * - CONFIG_TRACING
+ * - CONFIG_TRACING_TEST
+ * - CONFIG_TRACING_BACKEND_USB
+ * - CONFIG_TRACING_BACKEND_UART
+ *
+ * Input Specifications:
+ * - N/A
+ *
+ * Test Procedure:
+ * -# Create a thread to generate more switch thread tracing data.
+ * -# Using babeltrace to convert the CTF data to plain text.
+ * -# Check if tracing data be found in the traing data.
+ *
+ * Expected Test Result:
+ * - zephyr should support the tracing CTF format.
+ *
+ * Pass/Fail Criteria:
+ * - Successful if check points in test procedure are all passed, otherwise failure.
+ *
+ * Assumptions and Constraints:
+ * - N/A
+ */
+void test_tracing_function_CTF(void)
+{
+#ifndef CONFIG_TRACING_CTF
+	ztest_test_skip();
+#endif
+	generate_more_tracing_data();
+}
+
 void test_main(void)
 {
 	k_thread_access_grant(k_current_get(),
@@ -128,7 +210,8 @@ void test_main(void)
 				  &thread1_sem, &thread2_sem);
 
 	ztest_test_suite(test_tracing,
-			 ztest_unit_test(test_tracing_function)
+			 ztest_unit_test(test_tracing_function),
+			 ztest_unit_test(test_tracing_function_CTF)
 			 );
 
 	ztest_run_test_suite(test_tracing);

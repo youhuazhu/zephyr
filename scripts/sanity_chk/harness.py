@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0
 import re
+import os
+import subprocess
 from collections import OrderedDict
+import xml.etree.ElementTree as ET
 
 result_re = re.compile(".*(PASS|FAIL|SKIP) - (test_)?(.*)")
 
@@ -28,6 +31,9 @@ class Harness:
         self.recording = []
         self.fieldnames = []
         self.ztest = False
+        self.running_dir = None
+        self.source_dir = None
+        self.pytest_root = 'pytest'
 
     def configure(self, instance):
         config = instance.testcase.harness_config
@@ -41,6 +47,9 @@ class Harness:
             self.repeat = config.get('repeat', 1)
             self.ordered = config.get('ordered', True)
             self.record = config.get('record', {})
+            self.running_dir = config.get('running_dir', None)
+            self.source_dir = config.get('source_dir', None)
+            self.pytest_root = config.get('pytest_root', 'pytest')
 
     def process_test(self, line):
 
@@ -116,6 +125,48 @@ class Console(Harness):
 
         if self.state == "passed":
             self.tests[self.id] = "PASS"
+        else:
+            self.tests[self.id] = "FAIL"
+
+        self.process_test(line)
+
+class Pytest(Harness):
+    def handle(self, line):
+        cmd = [
+			'pytest',
+			'-s',
+			self.source_dir + '/' + self.pytest_root,
+			'--cmdopt',
+			self.running_dir,
+			'--junit-xml',
+			self.running_dir + '/report.html'
+        ]
+
+        with subprocess.Popen(cmd) as proc:
+            try:
+                proc.wait(15)
+                tree = ET.parse(self.running_dir + "/report.html")
+                root = tree.getroot()
+                for child in root:
+                    if child.tag == 'testsuite':
+                        if child.attrib['failures'] != '0':
+                            self.state = "failed"
+                        elif child.attrib['skipped'] != '0':
+                            self.state = "skipped"
+                        else:
+                            self.state = "passed"
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                self.state = "failed"
+            except ET.ParseError:
+                self.state = "failed"
+            except IOError:
+                self.state = "failed"
+
+        if self.state == "passed":
+            self.tests[self.id] = "PASS"
+        elif self.state == "skipped":
+            self.tests[self.id] = "SKIP"
         else:
             self.tests[self.id] = "FAIL"
 

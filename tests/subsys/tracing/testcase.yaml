@@ -9,3 +9,8 @@ tests:
     extra_args: CONF_FILE="prj_usb.conf"
     filter: CONFIG_UART_CONSOLE
     tags: tracing_usb
+  tracing.transport.uart.ctf:
+    extra_args: CONF_FILE="prj_uart_ctf.conf"
+    platform_allow: qemu_x86 qemu_x86_64
+    harness: pytest
+    tags: tracing_uart_ctf
